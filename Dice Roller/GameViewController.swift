@@ -4,8 +4,14 @@ import CoreMotion
 
 class GameViewController: UIViewController {
     
+    var d4Node:SCNNode!
     var d6Node:SCNNode!
+    var d8Node:SCNNode!
+    var d10Node:SCNNode!
+    var d12Node:SCNNode!
     var d20Node:SCNNode!
+    var pyramidNode:SCNNode!
+    var diceNodes = [SCNNode]()
     
     
     let motionManager = CMMotionManager()
@@ -23,8 +29,12 @@ class GameViewController: UIViewController {
         let scene = SCNScene(named: "art.scnassets/dice.scn")!
         
         d6Node = scene.rootNode.childNode(withName: "d6", recursively: true)!
+        pyramidNode = scene.rootNode.childNode(withName: "pyramid", recursively: true)!
         d20Node = scene.rootNode.childNode(withName: "d20", recursively: true)!
+        d8Node = scene.rootNode.childNode(withName: "d8", recursively: true)!
+        d8Node.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: d8Node.geometry!, options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull]))
         
+        diceNodes.append(contentsOf: [d6Node, d20Node, pyramidNode, d8Node])
         
 //        scnView.allowsCameraControl = true
         
@@ -77,7 +87,10 @@ class GameViewController: UIViewController {
     }
     
     @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        d6Node.physicsBody?.applyForce(SCNVector3(x: (Float.random * 10) - 5, y: Float.random * 5, z: (Float.random * 10) - 5), asImpulse: true)
+        
+        diceNodes.forEach { die in
+            die.physicsBody?.applyForce(SCNVector3(x: (Float.random * 10) - 5, y: Float.random * 5, z: (Float.random * 10) - 5), asImpulse: true)
+        }
     }
     
     override var shouldAutorotate: Bool {
@@ -115,7 +128,9 @@ class GameViewController: UIViewController {
 extension GameViewController: SCNSceneRendererDelegate {
 
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        d6Node.physicsBody?.applyForce(SCNVector3(x: Float(accel.x), y: Float(accel.y), z: Float(accel.z)), asImpulse: true)
+        diceNodes.forEach { die in
+            die.physicsBody?.applyForce(SCNVector3(x: Float(accel.x), y: Float(accel.y), z: Float(accel.z)), asImpulse: true)
+        }
     }
 
 }
