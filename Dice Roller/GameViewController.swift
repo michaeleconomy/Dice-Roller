@@ -1,17 +1,27 @@
 import UIKit
-import QuartzCore
 import SceneKit
+import CoreMotion
 
 class GameViewController: UIViewController {
     
     var d6Node:SCNNode!
     var d20Node:SCNNode!
     
+    
+    let motionManager = CMMotionManager()
+    var accel = CMAcceleration()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if (motionManager.isAccelerometerAvailable) {
+            motionManager.deviceMotionUpdateInterval = 0.1
+            motionManager.startDeviceMotionUpdates(to: OperationQueue(), withHandler: handleAccelerations)
+        }
+        
         // create a new scene
         let scene = SCNScene(named: "art.scnassets/dice.scn")!
+        
         d6Node = scene.rootNode.childNode(withName: "d6", recursively: true)!
         d20Node = scene.rootNode.childNode(withName: "d20", recursively: true)!
         
@@ -53,6 +63,8 @@ class GameViewController: UIViewController {
         // set the scene to the view
         scnView.scene = scene
         
+        scnView.delegate = self
+        
         // show statistics such as fps and timing information
         scnView.showsStatistics = true
         
@@ -86,6 +98,24 @@ class GameViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    private func handleAccelerations(deviceMotion: CMDeviceMotion?, err: Error?) {
+        if let deviceMotion = deviceMotion {
+            accel = deviceMotion.userAcceleration
+//            NSLog("accel: %f %f %f", accel.x, accel.y, accel.z)
+//            let sum = abs(accel.x) + abs(accel.y) + abs(accel.z)
+//            if (sum > 0.01) {
+            
+//            }
+        }
+    }
+}
+
+extension GameViewController: SCNSceneRendererDelegate {
+
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        d6Node.physicsBody?.applyForce(SCNVector3(x: Float(accel.x), y: Float(accel.y), z: Float(accel.z)), asImpulse: true)
     }
 
 }
