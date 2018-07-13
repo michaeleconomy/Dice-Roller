@@ -33,6 +33,9 @@ class GameViewController: UIViewController {
         d20Node = scene.rootNode.childNode(withName: "d20", recursively: true)!
         d8Node = scene.rootNode.childNode(withName: "d8", recursively: true)!
         d8Node.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: d8Node.geometry!, options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull]))
+        let mat = SCNMaterial()
+        mat.diffuse.contents = UIImage(named: "daes.scnassets/d8 texture.png")
+        d8Node.geometry?.replaceMaterial(at: 0, with: mat)
         
         diceNodes.append(contentsOf: [d6Node, d20Node, pyramidNode, d8Node])
         
