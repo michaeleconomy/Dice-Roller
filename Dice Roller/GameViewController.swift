@@ -4,13 +4,12 @@ import CoreMotion
 
 class GameViewController: UIViewController {
     
-    var d4Node:SCNNode!
-    var d6Node:SCNNode!
-    var d8Node:SCNNode!
-    var d10Node:SCNNode!
-    var d12Node:SCNNode!
-    var d20Node:SCNNode!
-    var pyramidNode:SCNNode!
+//    var d4Node:SCNNode!
+//    var d6Node:SCNNode!
+//    var d8Node:SCNNode!
+//    var d10Node:SCNNode!
+//    var d12Node:SCNNode!
+    
     var diceNodes = [SCNNode]()
     
     
@@ -27,17 +26,17 @@ class GameViewController: UIViewController {
         
         // create a new scene
         let scene = SCNScene(named: "art.scnassets/dice.scn")!
-        
-        d6Node = scene.rootNode.childNode(withName: "d6", recursively: true)!
-        pyramidNode = scene.rootNode.childNode(withName: "pyramid", recursively: true)!
-        d20Node = scene.rootNode.childNode(withName: "d20", recursively: true)!
-        d8Node = scene.rootNode.childNode(withName: "d8", recursively: true)!
-        d8Node.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: d8Node.geometry!, options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull]))
-        let mat = SCNMaterial()
-        mat.diffuse.contents = UIImage(named: "daes.scnassets/d8 texture.png")
-        d8Node.geometry?.replaceMaterial(at: 0, with: mat)
-        
-        diceNodes.append(contentsOf: [d6Node, d20Node, pyramidNode, d8Node])
+        ["d4", "d6", "d8"].forEach { die in
+            let dieNode = scene.rootNode.childNode(withName: die, recursively: true)!
+            dieNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: dieNode.geometry!, options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull]))
+            
+            let mat = SCNMaterial()
+            mat.diffuse.contents = UIImage(named: "daes.scnassets/\(die)texture.png")
+            dieNode.geometry?.insertMaterial(mat, at: 0)
+            diceNodes.append(dieNode)
+        }
+        let d20Node = scene.rootNode.childNode(withName: "d20", recursively: true)!
+        diceNodes.append(d20Node)
         
 //        scnView.allowsCameraControl = true
         
