@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.79.0 commit date:2018-03-22, commit time:14:10, hash:f4dc9f9</authoring_tool>
     </contributor>
-    <created>2018-07-13T16:52:17</created>
-    <modified>2018-07-13T16:52:17</modified>
+    <created>2018-07-14T16:15:53</created>
+    <modified>2018-07-14T16:15:53</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -77,7 +77,7 @@
     <geometry id="Cube-mesh" name="Cube">
       <mesh>
         <source id="Cube-mesh-positions">
-          <float_array id="Cube-mesh-positions-array" count="18">2.38419e-7 1 0 -2.98023e-7 -1 0 -1.29143e-7 -1.78814e-7 1 0 1.19209e-7 -1 -1 2.38419e-7 0 1 -2.98023e-7 0</float_array>
+          <float_array id="Cube-mesh-positions-array" count="18">2.38419e-7 0.5 0 -2.98023e-7 -0.5 0 -1.29143e-7 -1.78814e-7 0.5 0 1.19209e-7 -0.5 -0.5 2.38419e-7 0 0.5 -2.98023e-7 0</float_array>
           <technique_common>
             <accessor source="#Cube-mesh-positions-array" count="6" stride="3">
               <param name="X" type="float"/>
@@ -87,7 +87,7 @@
           </technique_common>
         </source>
         <source id="Cube-mesh-normals">
-          <float_array id="Cube-mesh-normals-array" count="24">0.5773501 -0.5773505 0.5773502 -0.5773501 0.5773504 0.5773503 -0.5773502 0.5773504 -0.5773503 -0.5773504 -0.5773501 -0.5773504 -0.5773505 -0.5773502 0.5773502 0.5773501 -0.5773504 -0.5773503 0.5773504 0.5773501 -0.5773502 0.5773504 0.5773501 0.5773504</float_array>
+          <float_array id="Cube-mesh-normals-array" count="24">0.57735 -0.5773507 0.5773503 -0.57735 0.5773506 0.5773503 -0.57735 0.5773506 -0.5773503 -0.5773506 -0.5773499 -0.5773504 -0.5773507 -0.5773501 0.5773501 0.5773499 -0.5773506 -0.5773503 0.5773507 0.57735 -0.5773501 0.5773505 0.5773499 0.5773505</float_array>
           <technique_common>
             <accessor source="#Cube-mesh-normals-array" count="8" stride="3">
               <param name="X" type="float"/>
@@ -119,7 +119,7 @@
     <geometry id="Cube_001-mesh" name="Cube.001">
       <mesh>
         <source id="Cube_001-mesh-positions">
-          <float_array id="Cube_001-mesh-positions-array" count="24">-1 -1 -1 -1 -1 1 -1 1 -1 -1 1 1 1 -1 -1 1 -1 1 1 1 -1 1 1 1</float_array>
+          <float_array id="Cube_001-mesh-positions-array" count="24">-0.4 -0.4 -0.4 -0.4 -0.4 0.4 -0.4 0.4 -0.4 -0.4 0.4 0.4 0.4 -0.4 -0.4 0.4 -0.4 0.4 0.4 0.4 -0.4 0.4 0.4 0.4</float_array>
           <technique_common>
             <accessor source="#Cube_001-mesh-positions-array" count="8" stride="3">
               <param name="X" type="float"/>
@@ -161,7 +161,7 @@
     <geometry id="Cube_002-mesh" name="Cube.002">
       <mesh>
         <source id="Cube_002-mesh-positions">
-          <float_array id="Cube_002-mesh-positions-array" count="12">8.59737e-4 -1 0.4650701 -0.9991403 0.6666751 0.4650701 -0.002579569 0.1057929 -1.013032 1.00086 0.6666751 0.4650701</float_array>
+          <float_array id="Cube_002-mesh-positions-array" count="12">0 -0.5541504 0.1875 -0.5 0.2791497 0.1875 0 -0.004150331 -0.5625 0.5 0.2791497 0.1875</float_array>
           <technique_common>
             <accessor source="#Cube_002-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -171,7 +171,7 @@
           </technique_common>
         </source>
         <source id="Cube_002-mesh-normals">
-          <float_array id="Cube_002-mesh-normals-array" count="12">-0.800796 -0.4804752 -0.3575882 0 0.9349508 -0.3547773 0 0 1 0.7997256 -0.4798329 -0.3608319</float_array>
+          <float_array id="Cube_002-mesh-normals-array" count="12">-0.8022767 -0.4813854 -0.3530159 0 0.9354858 -0.3533642 0 0 1 0.8022768 -0.4813853 -0.3530159</float_array>
           <technique_common>
             <accessor source="#Cube_002-mesh-normals-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -226,7 +226,7 @@
         </instance_geometry>
       </node>
       <node id="d6" name="d6" type="NODE">
-        <matrix sid="transform">1 0 0 -0.7896438 0 1 0 -1.963851 0 0 1 0.8852438 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0.02484488 0 1 0 -0.979592 0 0 1 0.02049071 0 0 0 1</matrix>
         <instance_geometry url="#Cube_001-mesh" name="d6">
           <bind_material>
             <technique_common>
@@ -236,7 +236,7 @@
         </instance_geometry>
       </node>
       <node id="d4" name="d4" type="NODE">
-        <matrix sid="transform">1 0 0 -1.400859 0 1 0 -4.521841 0 0 1 0.6410508 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0.1377308 0 1 0 -1.945534 0 0 1 -0.0292269 0 0 0 1</matrix>
         <instance_geometry url="#Cube_002-mesh" name="d4"/>
       </node>
     </visual_scene>

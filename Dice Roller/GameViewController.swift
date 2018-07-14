@@ -20,23 +20,27 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         if (motionManager.isAccelerometerAvailable) {
-            motionManager.deviceMotionUpdateInterval = 0.1
-            motionManager.startDeviceMotionUpdates(to: OperationQueue(), withHandler: handleAccelerations)
+//            motionManager.deviceMotionUpdateInterval = 0.1
+//            motionManager.startDeviceMotionUpdates(to: OperationQueue(), withHandler: handleAccelerations)
+            motionManager.accelerometerUpdateInterval = 1.0/60
+            motionManager.startAccelerometerUpdates(to: OperationQueue(), withHandler: handleAccelerations)
         }
         
         // create a new scene
         let scene = SCNScene(named: "art.scnassets/dice.scn")!
         ["d4", "d6", "d8"].forEach { die in
             let dieNode = scene.rootNode.childNode(withName: die, recursively: true)!
-            dieNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: dieNode.geometry!, options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull]))
-            
+            let physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: dieNode.geometry!, options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull]))
+            physicsBody.isAffectedByGravity = false
+            physicsBody.friction = 0.95
+            physicsBody.angularDamping = 0.02
+            physicsBody.restitution = 0.9
+            dieNode.physicsBody = physicsBody
             let mat = SCNMaterial()
             mat.diffuse.contents = UIImage(named: "daes.scnassets/\(die)texture.png")
             dieNode.geometry?.insertMaterial(mat, at: 0)
             diceNodes.append(dieNode)
         }
-        let d20Node = scene.rootNode.childNode(withName: "d20", recursively: true)!
-        diceNodes.append(d20Node)
         
 //        scnView.allowsCameraControl = true
         
@@ -89,9 +93,8 @@ class GameViewController: UIViewController {
     }
     
     @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        
         diceNodes.forEach { die in
-            die.physicsBody?.applyForce(SCNVector3(x: (Float.random * 10) - 5, y: Float.random * 5, z: (Float.random * 10) - 5), asImpulse: true)
+            die.physicsBody?.applyForce(SCNVector3(x: (Float.random * 10) - 5, y: (Float.random * 5.0) + 2, z: (Float.random * 10) - 5), asImpulse: true)
         }
     }
     
@@ -115,14 +118,20 @@ class GameViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    private func handleAccelerations(deviceMotion: CMDeviceMotion?, err: Error?) {
-        if let deviceMotion = deviceMotion {
-            accel = deviceMotion.userAcceleration
-//            NSLog("accel: %f %f %f", accel.x, accel.y, accel.z)
-//            let sum = abs(accel.x) + abs(accel.y) + abs(accel.z)
-//            if (sum > 0.01) {
-            
-//            }
+//    private func handleAccelerations(deviceMotion: CMDeviceMotion?, err: Error?) {
+//        if let deviceMotion = deviceMotion {
+//            accel = deviceMotion.userAcceleration
+////            NSLog("accel: %f %f %f", accel.x, accel.y, accel.z)
+////            let sum = abs(accel.x) + abs(accel.y) + abs(accel.z)
+////            if (sum > 0.01) {
+//
+////            }
+//        }
+//    }
+    
+    private func handleAccelerations(accelData: CMAccelerometerData?, err: Error?) {
+        if let accelData = accelData {
+            accel = accelData.acceleration
         }
     }
 }
@@ -131,7 +140,7 @@ extension GameViewController: SCNSceneRendererDelegate {
 
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         diceNodes.forEach { die in
-            die.physicsBody?.applyForce(SCNVector3(x: Float(accel.x), y: Float(accel.y), z: Float(accel.z)), asImpulse: true)
+            die.physicsBody?.applyForce(SCNVector3(x: Float(accel.y), y: Float(accel.z), z: Float(accel.x)), asImpulse: false)
         }
     }
 
