@@ -28,7 +28,7 @@ class GameViewController: UIViewController {
         
         // create a new scene
         let scene = SCNScene(named: "art.scnassets/dice.scn")!
-        ["d4", "d6", "d8"].forEach { die in
+        ["d4", "d6", "d8", "d10", "d12", "d20"].forEach { die in
             let dieNode = scene.rootNode.childNode(withName: die, recursively: true)!
             let physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: dieNode.geometry!, options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull]))
             physicsBody.isAffectedByGravity = false
