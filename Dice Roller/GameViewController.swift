@@ -34,6 +34,7 @@ class GameViewController: UIViewController {
             physicsBody.isAffectedByGravity = false
             physicsBody.friction = 0.95
             physicsBody.angularDamping = 0.02
+            physicsBody.damping = 0.05
             physicsBody.restitution = 0.9
             dieNode.physicsBody = physicsBody
             let mat = SCNMaterial()
