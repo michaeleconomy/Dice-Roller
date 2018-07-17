@@ -12,6 +12,8 @@ class GameViewController: UIViewController {
 //    var d10Node:SCNNode!
 //    var d12Node:SCNNode!
     
+    let stopped = SCNVector3()
+    
     var grabbedDie: SCNNode?
     var grabLastPos: CGPoint?
     
@@ -21,6 +23,10 @@ class GameViewController: UIViewController {
     
     let motionManager = CMMotionManager()
     var accel = CMAcceleration()
+    
+    var lastCheckedMovement: TimeInterval = 0
+    var diceMoving = [SCNNode : Bool]()
+    var diceLastMoveCheckLocations = [SCNNode : SCNVector3]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +53,7 @@ class GameViewController: UIViewController {
             mat.diffuse.contents = UIImage(named: "daes.scnassets/\(die)texture.png")
             dieNode.geometry?.insertMaterial(mat, at: 0)
             diceNodes.append(dieNode)
+            diceMoving[dieNode] = true
         }
         
 //        scnView.allowsCameraControl = true
@@ -106,7 +113,7 @@ class GameViewController: UIViewController {
         if (recognizer.state == .began) {
             if let die = getTouchedDie(recognizer) {
                 grabbedDie = die
-                grabbedDie!.physicsBody?.velocity = SCNVector3()
+                grabbedDie!.physicsBody?.velocity = stopped
                 grabbedDie!.physicsBody?.type = .static
                 grabbedDie!.worldPosition = SCNVector3(x: grabbedDie!.presentation.worldPosition.x, y: grabbedDie!.presentation.worldPosition.y, z: grabbedDie!.presentation.worldPosition.z)
                 grabLastPos = recognizer.location(in: scnView!)
@@ -213,6 +220,51 @@ extension GameViewController: SCNSceneRendererDelegate {
                 die.physicsBody?.applyForce(SCNVector3(x: Float(accel.y), y: Float(accel.z), z: Float(accel.x)), asImpulse: false)
             }
         }
+        if (time > lastCheckedMovement + 1) {
+            lastCheckedMovement = time
+            diceNodes.forEach { die in
+                detectChangeInStoppedness(die)
+            }
+        }
     }
-
+    
+    func didMove(_ die: SCNNode) -> Bool {
+        let currentLocation = die.presentation.worldPosition
+        let lastLocationOptional = diceLastMoveCheckLocations[die]
+        diceLastMoveCheckLocations[die] = currentLocation
+        
+        guard let lastLocation = lastLocationOptional else {
+            return true
+        }
+        
+        return !areSuperClose(currentLocation, lastLocation)
+    }
+    
+    func areSuperClose(_ a: SCNVector3, _ b: SCNVector3) -> Bool {
+        return abs(a.x - b.x) < 0.05 && abs(a.y - b.y) < 0.05 && abs(a.z - b.z) < 0.05
+    }
+    
+    func detectChangeInStoppedness(_ die: SCNNode){
+        let wasMoving = diceMoving[die] ?? false
+        if (wasMoving) {
+            if (!didMove(die)) {
+                handleStop(die)
+            }
+            return
+        }
+        
+        if (didMove(die)) {
+            handleStart(die)
+        }
+    }
+    
+    func handleStop(_ die: SCNNode) {
+        diceMoving[die] = false
+        NSLog("\(die.name ?? "unknown") stopped moving")
+    }
+    
+    func handleStart(_ die: SCNNode) {
+        diceMoving[die] = true
+        NSLog("\(die.name ?? "unknown") started moving")
+    }
 }
