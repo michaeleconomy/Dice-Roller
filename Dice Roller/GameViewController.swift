@@ -4,14 +4,20 @@ import CoreMotion
 
 class GameViewController: UIViewController {
     
+    var scnView: SCNView?
+    
 //    var d4Node:SCNNode!
 //    var d6Node:SCNNode!
 //    var d8Node:SCNNode!
 //    var d10Node:SCNNode!
 //    var d12Node:SCNNode!
     
-    var diceNodes = [SCNNode]()
+    var grabbedDie: SCNNode?
+    var grabLastPos: CGPoint?
     
+    var diceNodes = [SCNNode]()
+    var grabbedVelocity = SCNVector3()
+    var grabVelocityLastSet: Double?
     
     let motionManager = CMMotionManager()
     var accel = CMAcceleration()
@@ -75,28 +81,90 @@ class GameViewController: UIViewController {
 //        ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
         
         // retrieve the SCNView
-        let scnView = self.view as! SCNView
+        self.scnView = self.view as? SCNView
         
         // set the scene to the view
-        scnView.scene = scene
+        scnView!.scene = scene
         
-        scnView.delegate = self
+        scnView!.delegate = self
         
         // show statistics such as fps and timing information
-        scnView.showsStatistics = true
+        scnView!.showsStatistics = true
         
         // configure the view
-        scnView.backgroundColor = UIColor.blue
+        scnView!.backgroundColor = UIColor.blue
         
         // add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        scnView.addGestureRecognizer(tapGesture)
+        scnView!.addGestureRecognizer(tapGesture)
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        scnView!.addGestureRecognizer(panGesture)
     }
     
-    @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
+    @objc func handlePan(_ recognizer: UIGestureRecognizer) {
+        if (recognizer.state == .began) {
+            if let die = getTouchedDie(recognizer) {
+                grabbedDie = die
+                grabbedDie!.physicsBody?.velocity = SCNVector3()
+                grabbedDie!.physicsBody?.type = .static
+                grabbedDie!.worldPosition = SCNVector3(x: grabbedDie!.presentation.worldPosition.x, y: grabbedDie!.presentation.worldPosition.y, z: grabbedDie!.presentation.worldPosition.z)
+                grabLastPos = recognizer.location(in: scnView!)
+            }
+            return
+        }
+        if let grabbedDie = grabbedDie {
+            if (recognizer.state == .changed) {
+                let currentLoc = recognizer.location(in: scnView!)
+                let xdiff = Float(grabLastPos!.x - currentLoc.x)/100
+                let ydiff = Float(grabLastPos!.y - currentLoc.y)/100
+                self.grabLastPos = currentLoc
+                
+                if let grabVelocityLastSet = grabVelocityLastSet {
+                    let timeDiff = Float(CACurrentMediaTime() - grabVelocityLastSet) * 10
+                    grabbedVelocity = SCNVector3(x: ydiff / timeDiff * 10 , y: 0, z: -xdiff / timeDiff)
+                }
+                grabVelocityLastSet = CACurrentMediaTime()
+                grabbedDie.worldPosition = SCNVector3(x: grabbedDie.worldPosition.x + ydiff, y: grabbedDie.worldPosition.y, z: grabbedDie.worldPosition.z - xdiff)
+                return
+            }
+            if (recognizer.state == .ended) {
+                grabbedDie.physicsBody?.type = .dynamic
+                grabbedDie.physicsBody?.velocity = grabbedVelocity
+//
+//                let currentLoc = recognizer.location(in: scnView!)
+                self.grabbedDie = nil
+                return
+            }
+        }
+    }
+    
+    @objc func handleTap(_ recognizer: UIGestureRecognizer) {
+        if let die = getTouchedDie(recognizer) {
+            die.physicsBody?.applyForce(SCNVector3(x: (Float.random * 10) - 5, y: (Float.random * 5.0) + 2, z: (Float.random * 10) - 5), asImpulse: true)
+            return
+        }
+        
         diceNodes.forEach { die in
             die.physicsBody?.applyForce(SCNVector3(x: (Float.random * 10) - 5, y: (Float.random * 5.0) + 2, z: (Float.random * 10) - 5), asImpulse: true)
         }
+    }
+    
+    private func getTouchedDie(_ recognizer: UIGestureRecognizer) -> SCNNode? {
+        let location = recognizer.location(in: scnView!)
+        
+        let hitResults = scnView!.hitTest(location, options: nil)
+        
+        if hitResults.count > 0 {
+            let result = hitResults.first
+            if let node = result?.node {
+                if (node.name?.starts(with: "d") ?? false) {
+                    return node
+                }
+            }
+        }
+        
+        return nil
     }
     
     override var shouldAutorotate: Bool {
@@ -141,7 +209,9 @@ extension GameViewController: SCNSceneRendererDelegate {
 
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         diceNodes.forEach { die in
-            die.physicsBody?.applyForce(SCNVector3(x: Float(accel.y), y: Float(accel.z), z: Float(accel.x)), asImpulse: false)
+            if (die.name != grabbedDie?.name) {
+                die.physicsBody?.applyForce(SCNVector3(x: Float(accel.y), y: Float(accel.z), z: Float(accel.x)), asImpulse: false)
+            }
         }
     }
 
