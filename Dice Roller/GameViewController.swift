@@ -260,7 +260,8 @@ extension GameViewController: SCNSceneRendererDelegate {
     
     func handleStop(_ die: SCNNode) {
         diceMoving[die] = false
-        NSLog("\(die.name ?? "unknown") stopped moving")
+        let rolledFace = DiceFace.getFaceForRoll(die: die)
+        NSLog("\(die.name ?? "unknown") stopped moving.  Rolled: \(rolledFace), Angle: \(die.presentation.eulerAngles)")
     }
     
     func handleStart(_ die: SCNNode) {
