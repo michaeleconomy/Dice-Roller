@@ -1,10 +1,12 @@
 import UIKit
 import SceneKit
+import SpriteKit
 import CoreMotion
 
 class GameViewController: UIViewController {
     
     var scnView: SCNView?
+    var skScene: SKScene?
     
 //    var d4Node:SCNNode!
 //    var d6Node:SCNNode!
@@ -56,41 +58,10 @@ class GameViewController: UIViewController {
             diceMoving[dieNode] = true
         }
         
-//        scnView.allowsCameraControl = true
-        
-        
-//        // create and add a camera to the scene
-//        let cameraNode = SCNNode()
-//        cameraNode.camera = SCNCamera()
-//        scene.rootNode.addChildNode(cameraNode)
-//
-//        // place the camera
-//        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
-        
-//        // create and add a light to the scene
-//        let lightNode = SCNNode()
-//        lightNode.light = SCNLight()
-//        lightNode.light!.type = .omni
-//        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-//        scene.rootNode.addChildNode(lightNode)
-//
-//        // create and add an ambient light to the scene
-//        let ambientLightNode = SCNNode()
-//        ambientLightNode.light = SCNLight()
-//        ambientLightNode.light!.type = .ambient
-//        ambientLightNode.light!.color = UIColor.darkGray
-//        scene.rootNode.addChildNode(ambientLightNode)
-        
-        // retrieve the ship node
-//        let ship = scene.rootNode.childNode(withName: "ship", recursively: true)!
-        
-        // animate the 3d object
-//        ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
-        
-        // retrieve the SCNView
         self.scnView = self.view as? SCNView
+        skScene = SKScene(size: view.bounds.size)
+        scnView?.overlaySKScene = skScene!
         
-        // set the scene to the view
         scnView!.scene = scene
         
         scnView!.delegate = self
@@ -220,7 +191,7 @@ extension GameViewController: SCNSceneRendererDelegate {
                 die.physicsBody?.applyForce(SCNVector3(x: Float(accel.y), y: Float(accel.z), z: Float(accel.x)), asImpulse: false)
             }
         }
-        if (time > lastCheckedMovement + 1) {
+        if (time > lastCheckedMovement + 0.5) {
             lastCheckedMovement = time
             diceNodes.forEach { die in
                 detectChangeInStoppedness(die)
@@ -262,10 +233,17 @@ extension GameViewController: SCNSceneRendererDelegate {
         diceMoving[die] = false
         let rolledFace = DiceFace.getFaceForRoll(die: die)
         NSLog("\(die.name ?? "unknown") stopped moving.  Rolled: \(rolledFace), Angle: \(die.presentation.eulerAngles)")
+        
+        let twoDPoint = scnView!.projectPoint(die.presentation.position)
+        let skPoint = skScene!.convertPoint(fromView: CGPoint(x: CGFloat(twoDPoint.x), y: CGFloat(twoDPoint.y)))
+        let labelNode = SKLabelNode(text: rolledFace)
+        labelNode.position = skPoint
+        skScene?.addChild(labelNode)
     }
     
     func handleStart(_ die: SCNNode) {
         diceMoving[die] = true
         NSLog("\(die.name ?? "unknown") started moving")
+        skScene?.removeAllChildren()
     }
 }
