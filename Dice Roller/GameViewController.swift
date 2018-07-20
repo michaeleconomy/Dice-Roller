@@ -59,10 +59,10 @@ class GameViewController: UIViewController {
             diceNodes.append(dieNode)
             diceMoving[dieNode] = true
             let label = SKLabelNode()
-            let labelContainer = SKSpriteNode()
-            labelContainer.color = .black
-            labelContainer.alpha = 0.8
-            labelContainer.
+            let labelContainer = SKShapeNode()
+            labelContainer.fillColor = .black
+            labelContainer.strokeColor = .black
+            labelContainer.alpha = 0.9
             rollLabels[dieNode] = label
             labelContainer.addChild(label)
             skScene?.addChild(labelContainer)
@@ -242,14 +242,22 @@ extension GameViewController: SCNSceneRendererDelegate {
         diceMoving[die] = false
         let rolledFace = getFaceForRoll(die: die)
         
-        let twoDPoint = scnView!.projectPoint(die.presentation.position)
-        let skPoint = skScene!.convertPoint(fromView: CGPoint(x: CGFloat(twoDPoint.x), y: CGFloat(twoDPoint.y)))
+        let twoDPoint = scnView!.projectPoint(die.presentation.worldPosition)
+        var skPoint = skScene!.convertPoint(fromView: CGPoint(x: CGFloat(twoDPoint.x), y: CGFloat(twoDPoint.y)))
+        if (skPoint.y > 400) {
+            skPoint.y -= 50
+        }
+        else {
+            skPoint.y += 30
+        }
         let label = rollLabels[die]!
         label.text = rolledFace
-        label.position = CGPoint(x: 2.0, y: 2.0 - label.frame.size.height/2);
-        let labelContainer = label.parent as! SKSpriteNode
-        labelContainer.position = skPoint
-        labelContainer.size = CGSize(width: label.frame.size.width + 4, height: label.frame.size.height + 4)
+        label.position = CGPoint(x: skPoint.x + 2.0, y: skPoint.y + 2.0)
+        let labelContainer = label.parent as! SKShapeNode
+        labelContainer.path =
+            CGPath(roundedRect:
+                CGRect(origin: CGPoint(x: skPoint.x - label.frame.size.width/2.0, y: skPoint.y),
+                       size: CGSize(width: label.frame.size.width + 4, height: label.frame.size.height + 4)), cornerWidth: 5, cornerHeight: 5, transform: nil)
         labelContainer.isHidden = false
     }
     
