@@ -20,6 +20,7 @@ class GameViewController: UIViewController {
     var grabLastPos: CGPoint?
     
     var diceNodes = [SCNNode]()
+    var rollLabels = [SCNNode:SKLabelNode]()
     var grabbedVelocity = SCNVector3()
     var grabVelocityLastSet: Double?
     
@@ -40,7 +41,8 @@ class GameViewController: UIViewController {
             motionManager.startAccelerometerUpdates(to: OperationQueue(), withHandler: handleAccelerations)
         }
         
-        // create a new scene
+        skScene = SKScene(size: view.bounds.size)
+        
         let scene = SCNScene(named: "art.scnassets/dice.scn")!
         ["d4", "d6", "d8", "d10", "d12", "d20"].forEach { die in
             let dieNode = scene.rootNode.childNode(withName: die, recursively: true)!
@@ -56,10 +58,17 @@ class GameViewController: UIViewController {
             dieNode.geometry?.insertMaterial(mat, at: 0)
             diceNodes.append(dieNode)
             diceMoving[dieNode] = true
+            let label = SKLabelNode()
+            let labelContainer = SKSpriteNode()
+            labelContainer.color = .black
+            labelContainer.alpha = 0.8
+            labelContainer.
+            rollLabels[dieNode] = label
+            labelContainer.addChild(label)
+            skScene?.addChild(labelContainer)
         }
         
         self.scnView = self.view as? SCNView
-        skScene = SKScene(size: view.bounds.size)
         scnView?.overlaySKScene = skScene!
         
         scnView!.scene = scene
@@ -231,19 +240,39 @@ extension GameViewController: SCNSceneRendererDelegate {
     
     func handleStop(_ die: SCNNode) {
         diceMoving[die] = false
-        let rolledFace = DiceFace.getFaceForRoll(die: die)
-        NSLog("\(die.name ?? "unknown") stopped moving.  Rolled: \(rolledFace), Angle: \(die.presentation.eulerAngles)")
+        let rolledFace = getFaceForRoll(die: die)
         
         let twoDPoint = scnView!.projectPoint(die.presentation.position)
         let skPoint = skScene!.convertPoint(fromView: CGPoint(x: CGFloat(twoDPoint.x), y: CGFloat(twoDPoint.y)))
-        let labelNode = SKLabelNode(text: rolledFace)
-        labelNode.position = skPoint
-        skScene?.addChild(labelNode)
+        let label = rollLabels[die]!
+        label.text = rolledFace
+        label.position = CGPoint(x: 2.0, y: 2.0 - label.frame.size.height/2);
+        let labelContainer = label.parent as! SKSpriteNode
+        labelContainer.position = skPoint
+        labelContainer.size = CGSize(width: label.frame.size.width + 4, height: label.frame.size.height + 4)
+        labelContainer.isHidden = false
     }
     
     func handleStart(_ die: SCNNode) {
         diceMoving[die] = true
-        NSLog("\(die.name ?? "unknown") started moving")
-        skScene?.removeAllChildren()
+        rollLabels[die]!.parent!.isHidden = true
+    }
+    
+    func getFaceForRoll(die: SCNNode) -> String {
+        var multiplier: Float = 1
+        if (die.name == "d4") {
+            multiplier = -1
+        }
+        var highestY: Float = -999.0
+        var faceName = "x-unknown"
+        die.childNodes.forEach { side in
+            let newY = side.presentation.worldPosition.y * multiplier
+            if (newY > highestY) {
+                faceName = side.name ?? "x-unnamed face"
+                highestY = newY
+            }
+        }
+        let side = faceName.suffix(from: faceName.index(after: faceName.index(of: "-")!))
+        return String(side)
     }
 }
