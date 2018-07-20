@@ -24,6 +24,8 @@ class GameViewController: UIViewController {
     var grabbedVelocity = SCNVector3()
     var grabVelocityLastSet: Double?
     
+    let layFlatMessage = SKShapeNode()
+    
     let motionManager = CMMotionManager()
     var accel = CMAcceleration()
     
@@ -73,6 +75,26 @@ class GameViewController: UIViewController {
         floor.geometry?.firstMaterial?.diffuse.wrapS = .repeat
         floor.geometry?.firstMaterial?.diffuse.wrapT = .repeat
         
+        
+        
+        let label = SKLabelNode(text: "Warning - Lay phone flat")
+        let label2 = SKLabelNode(text: "so dice can settle")
+        let center = CGPoint(x: skScene!.size.width / 2, y: skScene!.size.height / 2)
+        label.position = CGPoint(x: center.x + 2.0, y: center.y + 7)
+        label2.position = CGPoint(x: center.x + 2.0, y: center.y - 23)
+        label.fontColor = .red
+        label2.fontColor = .red
+        layFlatMessage.fillColor = .black
+        layFlatMessage.strokeColor = .black
+        layFlatMessage.alpha = 0.9
+        layFlatMessage.path =
+            CGPath(roundedRect:
+                CGRect(origin: CGPoint(x: center.x - label.frame.size.width/2.0, y: center.y - label.frame.size.height),
+                       size: CGSize(width: label.frame.size.width + 4, height: label.frame.size.height * 2 + 4)), cornerWidth: 5, cornerHeight: 5, transform: nil)
+        layFlatMessage.addChild(label)
+        layFlatMessage.addChild(label2)
+        skScene?.addChild(layFlatMessage)
+        layFlatMessage.isHidden = true
         
         self.scnView = self.view as? SCNView
         scnView?.overlaySKScene = skScene!
@@ -194,6 +216,14 @@ class GameViewController: UIViewController {
     private func handleAccelerations(accelData: CMAccelerometerData?, err: Error?) {
         if let accelData = accelData {
             accel = accelData.acceleration
+            if (Float.random < 0.1) {
+                if (accel.z > -0.85 || abs(accel.x) > 0.2 || abs(accel.y) > 0.2) {
+                    layFlatMessage.isHidden = false
+                }
+                else {
+                    layFlatMessage.isHidden = true
+                }
+            }
         }
     }
 }
