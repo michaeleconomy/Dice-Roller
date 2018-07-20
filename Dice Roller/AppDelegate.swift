@@ -1,12 +1,5 @@
-//
-//  AppDelegate.swift
-//  Dice Roller
-//
-//  Created by Michael on 7/11/18.
-//  Copyright © 2018 Michael. All rights reserved.
-//
-
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +8,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        FirebaseApp.configure()
         return true
     }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		235444C1474DBA54CEE332E7 /* Pods_Dice_Roller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72DD995F1FD055044F3BEB18 /* Pods_Dice_Roller.framework */; };
 		4C2D82DA20F6EECE0027076F /* FloatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D82D920F6EECE0027076F /* FloatExtension.swift */; };
 		4C377D3620F6B97100A3C4D8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C377D3520F6B97100A3C4D8 /* AppDelegate.swift */; };
 		4C377D3820F6B97100A3C4D8 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C377D3720F6B97100A3C4D8 /* art.scnassets */; };
@@ -17,9 +18,11 @@
 		4C5EE49620F9278B0014B549 /* daes.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5EE49520F9278B0014B549 /* daes.scnassets */; };
 		4CD5520020F9746100A1BB68 /* attributions in Resources */ = {isa = PBXBuildFile; fileRef = 4CD551FF20F9746100A1BB68 /* attributions */; };
 		4CD5520220FE55C200A1BB68 /* SCNVector3Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD5520120FE55C200A1BB68 /* SCNVector3Extension.swift */; };
+		4CD55206210294F900A1BB68 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CD55205210294F800A1BB68 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0CEC1407620165C38C6EF327 /* Pods-Dice Roller.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dice Roller.release.xcconfig"; path = "Pods/Target Support Files/Pods-Dice Roller/Pods-Dice Roller.release.xcconfig"; sourceTree = "<group>"; };
 		4C2D82D920F6EECE0027076F /* FloatExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatExtension.swift; sourceTree = "<group>"; };
 		4C377D3220F6B97100A3C4D8 /* Dice Roller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dice Roller.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C377D3520F6B97100A3C4D8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -32,6 +35,9 @@
 		4C5EE49520F9278B0014B549 /* daes.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = daes.scnassets; sourceTree = "<group>"; };
 		4CD551FF20F9746100A1BB68 /* attributions */ = {isa = PBXFileReference; lastKnownFileType = text; path = attributions; sourceTree = "<group>"; };
 		4CD5520120FE55C200A1BB68 /* SCNVector3Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNVector3Extension.swift; sourceTree = "<group>"; };
+		4CD55205210294F800A1BB68 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		54691286FCBF568F10DEE0F3 /* Pods-Dice Roller.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dice Roller.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Dice Roller/Pods-Dice Roller.debug.xcconfig"; sourceTree = "<group>"; };
+		72DD995F1FD055044F3BEB18 /* Pods_Dice_Roller.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dice_Roller.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,17 +45,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235444C1474DBA54CEE332E7 /* Pods_Dice_Roller.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		23A973404613205895BBA3E0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				72DD995F1FD055044F3BEB18 /* Pods_Dice_Roller.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4C377D2920F6B97100A3C4D8 = {
 			isa = PBXGroup;
 			children = (
 				4C377D3420F6B97100A3C4D8 /* Dice Roller */,
 				4C377D3320F6B97100A3C4D8 /* Products */,
+				B7C1264EB5E8E61695E76D4A /* Pods */,
+				23A973404613205895BBA3E0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -75,8 +92,18 @@
 				4C377D4320F6B97500A3C4D8 /* Info.plist */,
 				4CD551FF20F9746100A1BB68 /* attributions */,
 				4CD5520120FE55C200A1BB68 /* SCNVector3Extension.swift */,
+				4CD55205210294F800A1BB68 /* GoogleService-Info.plist */,
 			);
 			path = "Dice Roller";
+			sourceTree = "<group>";
+		};
+		B7C1264EB5E8E61695E76D4A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				54691286FCBF568F10DEE0F3 /* Pods-Dice Roller.debug.xcconfig */,
+				0CEC1407620165C38C6EF327 /* Pods-Dice Roller.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -86,9 +113,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C377D4620F6B97500A3C4D8 /* Build configuration list for PBXNativeTarget "Dice Roller" */;
 			buildPhases = (
+				74C6B0866882FF633C7CD0C5 /* [CP] Check Pods Manifest.lock */,
 				4C377D2E20F6B97100A3C4D8 /* Sources */,
 				4C377D2F20F6B97100A3C4D8 /* Frameworks */,
 				4C377D3020F6B97100A3C4D8 /* Resources */,
+				BA22EE2C6BDA0C7EA712D875 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -143,10 +172,52 @@
 				4C377D3F20F6B97500A3C4D8 /* Assets.xcassets in Resources */,
 				4C377D3D20F6B97100A3C4D8 /* Main.storyboard in Resources */,
 				4C5EE49620F9278B0014B549 /* daes.scnassets in Resources */,
+				4CD55206210294F900A1BB68 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		74C6B0866882FF633C7CD0C5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Dice Roller-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BA22EE2C6BDA0C7EA712D875 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Dice Roller/Pods-Dice Roller-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Dice Roller/Pods-Dice Roller-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4C377D2E20F6B97100A3C4D8 /* Sources */ = {
@@ -298,11 +369,13 @@
 		};
 		4C377D4720F6B97500A3C4D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 54691286FCBF568F10DEE0F3 /* Pods-Dice Roller.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NTDFC8PLCC;
 				INFOPLIST_FILE = "Dice Roller/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -316,11 +389,13 @@
 		};
 		4C377D4820F6B97500A3C4D8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0CEC1407620165C38C6EF327 /* Pods-Dice Roller.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NTDFC8PLCC;
 				INFOPLIST_FILE = "Dice Roller/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
