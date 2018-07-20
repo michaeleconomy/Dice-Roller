@@ -25,6 +25,7 @@ class GameViewController: UIViewController {
     var grabVelocityLastSet: Double?
     
     let layFlatMessage = SKShapeNode()
+    var layFlatCount = 0
     
     let motionManager = CMMotionManager()
     var accel = CMAcceleration()
@@ -75,8 +76,26 @@ class GameViewController: UIViewController {
         floor.geometry?.firstMaterial?.diffuse.wrapS = .repeat
         floor.geometry?.firstMaterial?.diffuse.wrapT = .repeat
         
+        addLayFlatMessage()
         
+        self.scnView = self.view as? SCNView
+        scnView?.overlaySKScene = skScene!
         
+        scnView!.scene = scene
+        
+        scnView!.delegate = self
+        
+        // show statistics such as fps and timing information
+//        scnView!.showsStatistics = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        scnView!.addGestureRecognizer(tapGesture)
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        scnView!.addGestureRecognizer(panGesture)
+    }
+    
+    private func addLayFlatMessage() {
         let label = SKLabelNode(text: "Warning - Lay phone flat")
         let label2 = SKLabelNode(text: "so dice can settle")
         let center = CGPoint(x: skScene!.size.width / 2, y: skScene!.size.height / 2)
@@ -95,26 +114,6 @@ class GameViewController: UIViewController {
         layFlatMessage.addChild(label2)
         skScene?.addChild(layFlatMessage)
         layFlatMessage.isHidden = true
-        
-        self.scnView = self.view as? SCNView
-        scnView?.overlaySKScene = skScene!
-        
-        scnView!.scene = scene
-        
-        scnView!.delegate = self
-        
-        // show statistics such as fps and timing information
-        scnView!.showsStatistics = true
-        
-        // configure the view
-        scnView!.backgroundColor = UIColor.blue
-        
-        // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        scnView!.addGestureRecognizer(tapGesture)
-        
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        scnView!.addGestureRecognizer(panGesture)
     }
     
     @objc func handlePan(_ recognizer: UIGestureRecognizer) {
@@ -202,25 +201,18 @@ class GameViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-//    private func handleAccelerations(deviceMotion: CMDeviceMotion?, err: Error?) {
-//        if let deviceMotion = deviceMotion {
-//            accel = deviceMotion.userAcceleration
-////            NSLog("accel: %f %f %f", accel.x, accel.y, accel.z)
-////            let sum = abs(accel.x) + abs(accel.y) + abs(accel.z)
-////            if (sum > 0.01) {
-//
-////            }
-//        }
-//    }
-    
     private func handleAccelerations(accelData: CMAccelerometerData?, err: Error?) {
         if let accelData = accelData {
             accel = accelData.acceleration
             if (Float.random < 0.1) {
                 if (accel.z > -0.85 || abs(accel.x) > 0.2 || abs(accel.y) > 0.2) {
-                    layFlatMessage.isHidden = false
+                    layFlatCount += 1
+                    if (layFlatCount > 5) {
+                        layFlatMessage.isHidden = false
+                    }
                 }
                 else {
+                    layFlatCount = 0
                     layFlatMessage.isHidden = true
                 }
             }
