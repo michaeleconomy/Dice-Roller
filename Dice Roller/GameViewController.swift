@@ -68,6 +68,12 @@ class GameViewController: UIViewController {
             skScene?.addChild(labelContainer)
         }
         
+        let floor = scene.rootNode.childNode(withName: "floor", recursively: true)!
+        floor.geometry?.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Mult(SCNMatrix4MakeScale(1.5, 1.5, 1.5), SCNMatrix4MakeTranslation(0.7, 0.75, 0))
+        floor.geometry?.firstMaterial?.diffuse.wrapS = .repeat
+        floor.geometry?.firstMaterial?.diffuse.wrapT = .repeat
+        
+        
         self.scnView = self.view as? SCNView
         scnView?.overlaySKScene = skScene!
         
