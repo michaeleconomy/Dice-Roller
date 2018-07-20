@@ -7,6 +7,7 @@ class GameViewController: UIViewController {
     
     var scnView: SCNView?
     var skScene: SKScene?
+    let scene = SCNScene(named: "art.scnassets/dice.scn")!
     
 //    var d4Node:SCNNode!
 //    var d6Node:SCNNode!
@@ -46,35 +47,29 @@ class GameViewController: UIViewController {
         
         skScene = SKScene(size: view.bounds.size)
         
-        let scene = SCNScene(named: "art.scnassets/dice.scn")!
-        ["d4", "d6", "d8", "d10", "d12", "d20"].forEach { die in
-            let dieNode = scene.rootNode.childNode(withName: die, recursively: true)!
-            let physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: dieNode.geometry!, options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull]))
+        ["d4", "d6", "d8", "d10", "d12", "d20"].forEach { dieName in
+            let die = scene.rootNode.childNode(withName: dieName, recursively: true)!
+            let physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: die.geometry!, options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull]))
             physicsBody.isAffectedByGravity = false
             physicsBody.friction = 0.95
             physicsBody.angularDamping = 0.02
             physicsBody.damping = 0.05
             physicsBody.restitution = 0.9
-            dieNode.physicsBody = physicsBody
+            die.physicsBody = physicsBody
             let mat = SCNMaterial()
-            mat.diffuse.contents = UIImage(named: "daes.scnassets/\(die)texture.png")
-            dieNode.geometry?.insertMaterial(mat, at: 0)
-            diceNodes.append(dieNode)
-            diceMoving[dieNode] = true
-            let label = SKLabelNode()
-            let labelContainer = SKShapeNode()
-            labelContainer.fillColor = .black
-            labelContainer.strokeColor = .black
-            labelContainer.alpha = 0.9
-            rollLabels[dieNode] = label
-            labelContainer.addChild(label)
-            skScene?.addChild(labelContainer)
+            mat.diffuse.contents = UIImage(named: "daes.scnassets/\(dieName)texture.png")
+            die.geometry?.insertMaterial(mat, at: 0)
+            diceNodes.append(die)
+            diceMoving[die] = true
+            makeRollLabel(die)
         }
         
         let floor = scene.rootNode.childNode(withName: "floor", recursively: true)!
         floor.geometry?.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Mult(SCNMatrix4MakeScale(1.5, 1.5, 1.5), SCNMatrix4MakeTranslation(0.7, 0.75, 0))
         floor.geometry?.firstMaterial?.diffuse.wrapS = .repeat
         floor.geometry?.firstMaterial?.diffuse.wrapT = .repeat
+        
+        addDie(named: "d6")
         
         addLayFlatMessage()
         
@@ -93,6 +88,28 @@ class GameViewController: UIViewController {
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         scnView!.addGestureRecognizer(panGesture)
+    }
+    
+    private func addDie(named: String) {
+        let original = scene.rootNode.childNode(withName: named, recursively: true)!
+        let die = original.clone()
+        die.position = SCNVector3()
+        diceNodes.append(die)
+        die.name = "\(named)-copy"
+        diceMoving[die] = true
+        makeRollLabel(die)
+        scene.rootNode.addChildNode(die)
+    }
+    
+    private func makeRollLabel(_ die: SCNNode) {
+        let label = SKLabelNode()
+        let labelContainer = SKShapeNode()
+        labelContainer.fillColor = .black
+        labelContainer.strokeColor = .black
+        labelContainer.alpha = 0.9
+        rollLabels[die] = label
+        labelContainer.addChild(label)
+        skScene?.addChild(labelContainer)
     }
     
     private func addLayFlatMessage() {
@@ -224,7 +241,7 @@ extension GameViewController: SCNSceneRendererDelegate {
 
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         diceNodes.forEach { die in
-            if (die.name != grabbedDie?.name) {
+            if (die !== grabbedDie) {
                 die.physicsBody?.applyForce(SCNVector3(x: Float(accel.y), y: Float(accel.z), z: Float(accel.x)), asImpulse: false)
             }
         }
@@ -296,7 +313,7 @@ extension GameViewController: SCNSceneRendererDelegate {
     
     func getFaceForRoll(die: SCNNode) -> String {
         var multiplier: Float = 1
-        if (die.name == "d4") {
+        if (die.name!.starts(with: "d4")) {
             multiplier = -1
         }
         var highestY: Float = -999.0
