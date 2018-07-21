@@ -16,6 +16,8 @@
 		4C377D3F20F6B97500A3C4D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C377D3E20F6B97500A3C4D8 /* Assets.xcassets */; };
 		4C377D4220F6B97500A3C4D8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C377D4020F6B97500A3C4D8 /* LaunchScreen.storyboard */; };
 		4C5EE49620F9278B0014B549 /* daes.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5EE49520F9278B0014B549 /* daes.scnassets */; };
+		4C7AF20D2102AE3A0081A525 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AF20C2102AE3A0081A525 /* SettingsViewController.swift */; };
+		4C7AF20F2102AEB60081A525 /* DiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AF20E2102AEB60081A525 /* DiceManager.swift */; };
 		4CD5520020F9746100A1BB68 /* attributions in Resources */ = {isa = PBXBuildFile; fileRef = 4CD551FF20F9746100A1BB68 /* attributions */; };
 		4CD5520220FE55C200A1BB68 /* SCNVector3Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD5520120FE55C200A1BB68 /* SCNVector3Extension.swift */; };
 		4CD55206210294F900A1BB68 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CD55205210294F800A1BB68 /* GoogleService-Info.plist */; };
@@ -33,6 +35,8 @@
 		4C377D4120F6B97500A3C4D8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4C377D4320F6B97500A3C4D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C5EE49520F9278B0014B549 /* daes.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = daes.scnassets; sourceTree = "<group>"; };
+		4C7AF20C2102AE3A0081A525 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		4C7AF20E2102AEB60081A525 /* DiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceManager.swift; sourceTree = "<group>"; };
 		4CD551FF20F9746100A1BB68 /* attributions */ = {isa = PBXFileReference; lastKnownFileType = text; path = attributions; sourceTree = "<group>"; };
 		4CD5520120FE55C200A1BB68 /* SCNVector3Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNVector3Extension.swift; sourceTree = "<group>"; };
 		4CD55205210294F800A1BB68 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -86,6 +90,7 @@
 				4C5EE49520F9278B0014B549 /* daes.scnassets */,
 				4C377D3720F6B97100A3C4D8 /* art.scnassets */,
 				4C377D3920F6B97100A3C4D8 /* GameViewController.swift */,
+				4C7AF20C2102AE3A0081A525 /* SettingsViewController.swift */,
 				4C377D3B20F6B97100A3C4D8 /* Main.storyboard */,
 				4C377D3E20F6B97500A3C4D8 /* Assets.xcassets */,
 				4C377D4020F6B97500A3C4D8 /* LaunchScreen.storyboard */,
@@ -93,6 +98,7 @@
 				4CD551FF20F9746100A1BB68 /* attributions */,
 				4CD5520120FE55C200A1BB68 /* SCNVector3Extension.swift */,
 				4CD55205210294F800A1BB68 /* GoogleService-Info.plist */,
+				4C7AF20E2102AEB60081A525 /* DiceManager.swift */,
 			);
 			path = "Dice Roller";
 			sourceTree = "<group>";
@@ -226,7 +232,9 @@
 			files = (
 				4C377D3A20F6B97100A3C4D8 /* GameViewController.swift in Sources */,
 				4C377D3620F6B97100A3C4D8 /* AppDelegate.swift in Sources */,
+				4C7AF20F2102AEB60081A525 /* DiceManager.swift in Sources */,
 				4C2D82DA20F6EECE0027076F /* FloatExtension.swift in Sources */,
+				4C7AF20D2102AE3A0081A525 /* SettingsViewController.swift in Sources */,
 				4CD5520220FE55C200A1BB68 /* SCNVector3Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
