@@ -19,26 +19,38 @@
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </sceneKitView>
                     <connections>
-                        <segue destination="sfn-Mx-oTl" kind="presentation" id="VnZ-HA-g83"/>
+                        <segue destination="sfn-Mx-oTl" kind="presentation" identifier="settings" id="VnZ-HA-g83"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="113" y="30"/>
         </scene>
-        <!--View Controller-->
+        <!--Settings View Controller-->
         <scene sceneID="rqS-4A-5n6">
             <objects>
-                <viewController modalPresentationStyle="overCurrentContext" id="sfn-Mx-oTl" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="overCurrentContext" id="sfn-Mx-oTl" customClass="SettingsViewController" customModule="Dice_Roller" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6Wf-JC-t6X">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="qtE-Bt-8LG">
-                                <rect key="frame" x="87.5" y="187.5" width="200" height="312"/>
+                                <rect key="frame" x="87.5" y="155.5" width="200" height="376.5"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dice Roller" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ECY-51-PGx">
+                                        <rect key="frame" x="49.5" y="0.0" width="101" height="24"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="by Michael Economy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ShL-co-YTY">
+                                        <rect key="frame" x="21.5" y="34" width="157.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="1Ib-Jt-2tg">
-                                        <rect key="frame" x="0.0" y="0.0" width="200" height="30"/>
+                                        <rect key="frame" x="0.0" y="64.5" width="200" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="d4:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pdh-MT-liM">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="30"/>
@@ -52,6 +64,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vu9-I9-7Qc">
                                                 <rect key="frame" x="60" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="-"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="fhK-Ee-oPk"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pxy-CM-q2e">
                                                 <rect key="frame" x="110" y="0.0" width="40" height="30"/>
@@ -65,11 +80,14 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BQe-jm-IIz">
                                                 <rect key="frame" x="170" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="+"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="NMd-L0-Rce"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="wJe-Tq-lhk">
-                                        <rect key="frame" x="0.0" y="40" width="200" height="30"/>
+                                        <rect key="frame" x="0.0" y="104.5" width="200" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="d6:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bIf-RW-u6n">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="30"/>
@@ -83,6 +101,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zma-B4-iEm">
                                                 <rect key="frame" x="60" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="-"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="OoH-6P-waw"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eg2-AV-eX5">
                                                 <rect key="frame" x="110" y="0.0" width="40" height="30"/>
@@ -96,11 +117,14 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wxe-ts-bBm">
                                                 <rect key="frame" x="170" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="+"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="S9G-Kh-NcN"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="hdc-dE-9Ii">
-                                        <rect key="frame" x="0.0" y="80" width="200" height="30"/>
+                                        <rect key="frame" x="0.0" y="144.5" width="200" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="d8:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eDc-qr-otC">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="30"/>
@@ -114,6 +138,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G22-XY-fLp">
                                                 <rect key="frame" x="60" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="-"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="NQb-d1-fuL"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6x-Cw-hSu">
                                                 <rect key="frame" x="110" y="0.0" width="40" height="30"/>
@@ -127,11 +154,14 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xqF-fQ-ybA">
                                                 <rect key="frame" x="170" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="+"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="VOJ-ld-5OR"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="mSd-cI-dXW">
-                                        <rect key="frame" x="0.0" y="120" width="200" height="30"/>
+                                        <rect key="frame" x="0.0" y="184.5" width="200" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="d10:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nct-h4-VnR">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="30"/>
@@ -145,6 +175,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HMo-Yp-wGx">
                                                 <rect key="frame" x="60" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="-"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="D2i-Oe-VGr"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dW1-79-1Wm">
                                                 <rect key="frame" x="110" y="0.0" width="40" height="30"/>
@@ -158,11 +191,14 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hHn-Z1-tPm">
                                                 <rect key="frame" x="170" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="+"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="NmQ-Uh-9b7"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="a1y-3i-T4c">
-                                        <rect key="frame" x="0.0" y="160" width="200" height="30"/>
+                                        <rect key="frame" x="0.0" y="224.5" width="200" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="d12:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4FG-Pp-Vvf">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="30"/>
@@ -176,6 +212,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LKg-qE-Q12">
                                                 <rect key="frame" x="60" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="-"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="9kH-OQ-Uk9"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yr5-rN-ZdF">
                                                 <rect key="frame" x="110" y="0.0" width="40" height="30"/>
@@ -189,11 +228,14 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Alw-Y0-Ful">
                                                 <rect key="frame" x="170" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="+"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="0RE-2l-Ofb"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="QMa-Ug-ZUQ">
-                                        <rect key="frame" x="0.0" y="200" width="200" height="30"/>
+                                        <rect key="frame" x="0.0" y="264.5" width="200" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="d20:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="whP-GE-eVi">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="30"/>
@@ -207,6 +249,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EhA-PU-hp3">
                                                 <rect key="frame" x="60" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="-"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="k8F-UM-iZ0"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivV-Vt-YE8">
                                                 <rect key="frame" x="110" y="0.0" width="40" height="30"/>
@@ -220,11 +265,14 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j2x-zB-id4">
                                                 <rect key="frame" x="170" y="0.0" width="30" height="30"/>
                                                 <state key="normal" title="+"/>
+                                                <connections>
+                                                    <action selector="dieToggle:" destination="sfn-Mx-oTl" eventType="touchUpInside" id="rm3-0Z-eoK"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="LBm-Mx-a4A">
-                                        <rect key="frame" x="36.5" y="240" width="127" height="31"/>
+                                        <rect key="frame" x="36.5" y="304.5" width="127" height="31"/>
                                         <subviews>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a4x-9y-uWf">
                                                 <rect key="frame" x="0.0" y="0.0" width="51" height="31"/>
@@ -238,7 +286,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="WHM-Rk-cO2">
-                                        <rect key="frame" x="39" y="281" width="122" height="31"/>
+                                        <rect key="frame" x="39" y="345.5" width="122" height="31"/>
                                         <subviews>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1R9-XV-Bxe">
                                                 <rect key="frame" x="0.0" y="0.0" width="51" height="31"/>
@@ -261,6 +309,16 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hDV-RF-dNV"/>
                     </view>
+                    <connections>
+                        <outlet property="d10CountLabel" destination="dW1-79-1Wm" id="zEj-ti-QMD"/>
+                        <outlet property="d12CountLabel" destination="yr5-rN-ZdF" id="kZg-KV-mYr"/>
+                        <outlet property="d20CountLabel" destination="ivV-Vt-YE8" id="gIe-YF-AKE"/>
+                        <outlet property="d4CountLabel" destination="Pxy-CM-q2e" id="Zmn-X5-YsQ"/>
+                        <outlet property="d6CountLabel" destination="eg2-AV-eX5" id="4uT-sN-SrX"/>
+                        <outlet property="d8CountLabel" destination="h6x-Cw-hSu" id="do7-KS-cbN"/>
+                        <outlet property="motionSwitch" destination="1R9-XV-Bxe" id="uu2-nc-Ogu"/>
+                        <outlet property="soundsSwitch" destination="a4x-9y-uWf" id="LWe-56-69E"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LqM-fG-HRM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

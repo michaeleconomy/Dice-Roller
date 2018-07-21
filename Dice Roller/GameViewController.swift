@@ -7,6 +7,8 @@ class GameViewController: UIViewController {
     
     var scnView: SCNView?
     var skScene: SKScene?
+    let settingsButton = SKSpriteNode(imageNamed: "gears")
+    
     let scene = SCNScene(named: "art.scnassets/dice.scn")!
     
 //    var d4Node:SCNNode!
@@ -37,6 +39,8 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //TODO load settings
         DiceManager.shared.delegate = self
         
         if (motionManager.isAccelerometerAvailable) {
@@ -70,9 +74,10 @@ class GameViewController: UIViewController {
         floor.geometry?.firstMaterial?.diffuse.wrapS = .repeat
         floor.geometry?.firstMaterial?.diffuse.wrapT = .repeat
         
-        addDie(type: "d6")
-        
         addLayFlatMessage()
+        
+        settingsButton.position = CGPoint(x: skScene!.size.width - 10, y: skScene!.size.height - 10)
+        skScene?.addChild(settingsButton)
         
         self.scnView = self.view as? SCNView
         scnView?.overlaySKScene = skScene!
@@ -162,6 +167,12 @@ class GameViewController: UIViewController {
     }
     
     @objc func handleTap(_ recognizer: UIGestureRecognizer) {
+        let firstTouchPoint = recognizer.location(ofTouch: 0, in: nil)
+        let skNode = skScene!.atPoint(skScene!.convertPoint(fromView: firstTouchPoint))
+        if skNode == settingsButton {
+            performSegue(withIdentifier: "settings", sender: nil)
+            return
+        }
         if let die = getTouchedDie(recognizer) {
             die.physicsBody?.applyForce(SCNVector3(x: (Float.random * 10) - 5, y: (Float.random * 5.0) + 2, z: (Float.random * 10) - 5), asImpulse: true)
             return
@@ -326,21 +337,24 @@ extension GameViewController: DiceWatcher {
     func addDie(type: String) {
         let original = scene.rootNode.childNode(withName: type, recursively: true)!
         if (original.isHidden) {
+            NSLog("unhiding original \(type)")
             original.isHidden = false
             diceNodes.append(original)
             return
         }
+        NSLog("creating a new \(type)")
         let die = original.clone()
         die.position = SCNVector3()
-        diceNodes.append(die)
         die.name = "\(type)-copy"
         diceMoving[die] = true
         makeRollLabel(die)
         scene.rootNode.addChildNode(die)
+        diceNodes.append(die)
     }
     
     func removeDie(type: String) {
         if let copy = scene.rootNode.childNode(withName: "\(type)-copy", recursively: true) {
+            NSLog("removing a \(type)")
             copy.removeFromParentNode()
             diceMoving.removeValue(forKey: copy)
             let label = rollLabels.removeValue(forKey: copy)!
@@ -350,9 +364,12 @@ extension GameViewController: DiceWatcher {
             diceNodes.remove(at: index)
             return
         }
+        NSLog("hiding original \(type)")
         let die = scene.rootNode.childNode(withName: type, recursively: true)!
         die.isHidden = true
         
+        let label = rollLabels[die]!
+        label.parent!.isHidden = true
         let index = diceNodes.index(of: die)!
         diceNodes.remove(at: index)
     }
@@ -373,3 +390,4 @@ extension GameViewController: DiceWatcher {
         //TODO
     }
 }
+
