@@ -344,7 +344,8 @@ extension GameViewController: DiceWatcher {
         }
         NSLog("creating a new \(type)")
         let die = original.clone()
-        die.position = SCNVector3()
+        die.worldPosition = SCNVector3(x: 0.0, y: 2.0, z: 0.0)
+//        die.presentation.worldPosition = SCNVector3()
         die.name = "\(type)-copy"
         diceMoving[die] = true
         makeRollLabel(die)
