@@ -67,16 +67,24 @@ class GameViewController: UIViewController {
             diceNodes.append(die)
             diceMoving[die] = true
             makeRollLabel(die)
+            var count = 1
+            let settingsCount = DiceManager.shared.diceCounts[dieName]!
+            if (settingsCount == 0) {
+                removeDie(type: dieName)
+            }
+            
+            while (count < settingsCount) {
+                addDie(type: dieName)
+                count += 1
+            }
         }
         
-        let floor = scene.rootNode.childNode(withName: "floor", recursively: true)!
-        floor.geometry?.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Mult(SCNMatrix4MakeScale(1.5, 1.5, 1.5), SCNMatrix4MakeTranslation(0.7, 0.75, 0))
-        floor.geometry?.firstMaterial?.diffuse.wrapS = .repeat
-        floor.geometry?.firstMaterial?.diffuse.wrapT = .repeat
+        configureFloorMaterial()
         
         addLayFlatMessage()
         
-        settingsButton.position = CGPoint(x: skScene!.size.width - 10, y: skScene!.size.height - 10)
+        //add settings button
+        settingsButton.position = CGPoint(x: skScene!.size.width - 20, y: skScene!.size.height - 20)
         skScene?.addChild(settingsButton)
         
         self.scnView = self.view as? SCNView
@@ -96,6 +104,12 @@ class GameViewController: UIViewController {
         scnView!.addGestureRecognizer(panGesture)
     }
     
+    private func configureFloorMaterial() {
+        let floor = scene.rootNode.childNode(withName: "floor", recursively: true)!
+        floor.geometry?.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Mult(SCNMatrix4MakeScale(1.5, 1.5, 1.5), SCNMatrix4MakeTranslation(0.7, 0.75, 0))
+        floor.geometry?.firstMaterial?.diffuse.wrapS = .repeat
+        floor.geometry?.firstMaterial?.diffuse.wrapT = .repeat
+    }
     
     private func makeRollLabel(_ die: SCNNode) {
         let label = SKLabelNode()
@@ -356,23 +370,23 @@ extension GameViewController: DiceWatcher {
     func removeDie(type: String) {
         if let copy = scene.rootNode.childNode(withName: "\(type)-copy", recursively: true) {
             NSLog("removing a \(type)")
-            copy.removeFromParentNode()
-            diceMoving.removeValue(forKey: copy)
-            let label = rollLabels.removeValue(forKey: copy)!
-            label.parent?.removeFromParent()
             
             let index = diceNodes.index(of: copy)!
             diceNodes.remove(at: index)
+            diceMoving.removeValue(forKey: copy)
+            let label = rollLabels.removeValue(forKey: copy)!
+            label.parent?.removeFromParent()
+            copy.removeFromParentNode()
             return
         }
         NSLog("hiding original \(type)")
         let die = scene.rootNode.childNode(withName: type, recursively: true)!
-        die.isHidden = true
         
-        let label = rollLabels[die]!
-        label.parent!.isHidden = true
         let index = diceNodes.index(of: die)!
         diceNodes.remove(at: index)
+        let label = rollLabels[die]!
+        label.parent!.isHidden = true
+        die.isHidden = true
     }
     
     func turnOnMotion() {

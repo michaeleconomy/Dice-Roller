@@ -18,7 +18,14 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.viewTapped)))
         
-        //TODO load settings
+        let counts = DiceManager.shared.diceCounts
+        
+        d4CountLabel.text = String(counts["d4"]!)
+        d6CountLabel.text = String(counts["d6"]!)
+        d8CountLabel.text = String(counts["d8"]!)
+        d10CountLabel.text = String(counts["d10"]!)
+        d12CountLabel.text = String(counts["d12"]!)
+        d20CountLabel.text = String(counts["d20"]!)
     }
     
     @objc private func viewTapped() {
