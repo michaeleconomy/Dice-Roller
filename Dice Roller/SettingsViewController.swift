@@ -26,6 +26,9 @@ class SettingsViewController: UIViewController {
         d10CountLabel.text = String(counts["d10"]!)
         d12CountLabel.text = String(counts["d12"]!)
         d20CountLabel.text = String(counts["d20"]!)
+        
+        soundsSwitch.isOn = DiceManager.shared.sounds
+        motionSwitch.isOn = DiceManager.shared.motion
     }
     
     @objc private func viewTapped() {
@@ -57,4 +60,24 @@ class SettingsViewController: UIViewController {
         }
         countLabel.text = String(newCount)
     }
+    
+    @IBAction func soundsChanged() {
+        if (soundsSwitch.isOn) {
+            DiceManager.shared.turnOnSounds()
+        }
+        else {
+            DiceManager.shared.turnOffSounds()
+        }
+    }
+    
+    @IBAction func motionChanged() {
+        if (motionSwitch.isOn) {
+            DiceManager.shared.turnOnMotion()
+        }
+        else {
+            DiceManager.shared.turnOffMotion()
+        }
+    }
+    
+    
 }

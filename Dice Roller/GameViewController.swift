@@ -240,7 +240,7 @@ class GameViewController: UIViewController {
             if (Float.random < 0.1) {
                 if (accel.z > -0.85 || abs(accel.x) > 0.2 || abs(accel.y) > 0.2) {
                     layFlatCount += 1
-                    if (layFlatCount > 5) {
+                    if (layFlatCount > 5 && DiceManager.shared.motion) {
                         layFlatMessage.isHidden = false
                     }
                 }
@@ -256,9 +256,13 @@ class GameViewController: UIViewController {
 extension GameViewController: SCNSceneRendererDelegate {
 
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        var accelToUse = SCNVector3(x: Float(accel.y), y: Float(accel.z), z: Float(accel.x))
+        if (!DiceManager.shared.motion) {
+            accelToUse = SCNVector3(x: 0.0, y: -1.0, z: 0.0)
+        }
         diceNodes.forEach { die in
             if (die !== grabbedDie) {
-                die.physicsBody?.applyForce(SCNVector3(x: Float(accel.y), y: Float(accel.z), z: Float(accel.x)), asImpulse: false)
+                die.physicsBody?.applyForce(accelToUse, asImpulse: false)
             }
         }
         if (time > lastCheckedMovement + 0.5) {
@@ -394,7 +398,7 @@ extension GameViewController: DiceWatcher {
     }
     
     func turnOffMotion() {
-        //TODO
+        layFlatMessage.isHidden = false
     }
     
     func turnOnSounds() {
