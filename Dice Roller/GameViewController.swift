@@ -256,9 +256,9 @@ class GameViewController: UIViewController {
 extension GameViewController: SCNSceneRendererDelegate {
 
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        var accelToUse = SCNVector3(x: Float(accel.y), y: Float(accel.z), z: Float(accel.x))
+        var accelToUse = SCNVector3(x: Float(accel.y) * 2, y: Float(accel.z) * 2, z: Float(accel.x) * 2)
         if (!DiceManager.shared.motion) {
-            accelToUse = SCNVector3(x: 0.0, y: -1.0, z: 0.0)
+            accelToUse = SCNVector3(x: 0.0, y: -2.0, z: 0.0)
         }
         diceNodes.forEach { die in
             if (die !== grabbedDie) {
