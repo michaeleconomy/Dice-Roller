@@ -5,8 +5,6 @@ import CoreMotion
 
 class GameViewController: UIViewController {
     
-    var maxCollisionImpulse: CGFloat = 0.0 //TODO REMOVE
-    
     var scnView: SCNView?
     var skScene: SKScene?
     let settingsButton = SKSpriteNode(imageNamed: "gears")
@@ -38,13 +36,9 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //TODO load settings
         DiceManager.shared.delegate = self
         
         if (motionManager.isAccelerometerAvailable) {
-//            motionManager.deviceMotionUpdateInterval = 0.1
-//            motionManager.startDeviceMotionUpdates(to: OperationQueue(), withHandler: handleAccelerations)
             motionManager.accelerometerUpdateInterval = 1.0/60
             motionManager.startAccelerometerUpdates(to: OperationQueue(), withHandler: handleAccelerations)
         }
@@ -422,7 +416,7 @@ extension GameViewController: DiceWatcher {
     }
     
     func turnOnMotion() {
-        //TODO
+        //nothing
     }
     
     func turnOffMotion() {
@@ -430,11 +424,11 @@ extension GameViewController: DiceWatcher {
     }
     
     func turnOnSounds() {
-        //TODO
+        //nothing
     }
     
     func turnOffSounds() {
-        //TODO
+        //nothing
     }
 }
 
@@ -459,10 +453,7 @@ extension GameViewController: SCNPhysicsContactDelegate {
                 audioSource.volume = 3.0
             }
             die.runAction(action)
-            if (contact.collisionImpulse > maxCollisionImpulse) {
-                maxCollisionImpulse = contact.collisionImpulse
-            }
-            NSLog("\(contact.nodeA.name ?? "unknown") contacted \(contact.nodeB.name ?? "unknown")  contact.collisionImpulse: \(contact.collisionImpulse), maxCollisionImpulse: \(maxCollisionImpulse)")
+//            NSLog("\(contact.nodeA.name ?? "unknown") contacted \(contact.nodeB.name ?? "unknown")  contact.collisionImpulse: \(contact.collisionImpulse)")
         }
     }
 }
