@@ -391,6 +391,7 @@ extension GameViewController: DiceWatcher {
     }
     
     func removeDie(type: String) {
+        scene.isPaused = true
         if let copy = scene.rootNode.childNode(withName: "\(type)-copy", recursively: true) {
             NSLog("removing a \(type)")
             
@@ -400,6 +401,8 @@ extension GameViewController: DiceWatcher {
             let label = rollLabels.removeValue(forKey: copy)!
             label.parent?.removeFromParent()
             copy.removeFromParentNode()
+            
+            scene.isPaused = false
             return
         }
         NSLog("hiding original \(type)")
@@ -410,6 +413,7 @@ extension GameViewController: DiceWatcher {
         let label = rollLabels[die]!
         label.parent!.isHidden = true
         die.isHidden = true
+        scene.isPaused = false
     }
     
     func turnOnMotion() {
