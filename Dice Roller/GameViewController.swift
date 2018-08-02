@@ -6,6 +6,7 @@ import CoreMotion
 class GameViewController: UIViewController {
     
     var maxCollisionImpulse: CGFloat = 0.0 //TODO REMOVE
+    var soundCount = 0
     
     var scnView: SCNView?
     var skScene: SKScene?
@@ -32,6 +33,8 @@ class GameViewController: UIViewController {
     var lastCheckedMovement: TimeInterval = 0
     var diceMoving = [SCNNode : Bool]()
     var diceLastMoveCheckLocations = [SCNNode : SCNVector3]()
+    
+    let diceContactSounds: [SCNAudioSource] = [SCNAudioSource(named: "art.scnassets/sounds/dice_contact1.m4a")!, SCNAudioSource(named: "art.scnassets/sounds/dice_contact2.m4a")!]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -412,11 +415,24 @@ extension GameViewController: DiceWatcher {
 
 extension GameViewController: SCNPhysicsContactDelegate {
     func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
-        if (contact.collisionImpulse > 0.1) {
+        if (contact.collisionImpulse > 0.5) {
+            soundCount += 1
+            var audioSource = diceContactSounds.first! //TODO choose random one
+//            if (!(contact.nodeA.name?.starts(with: "d") ?? false) || !(contact.nodeB.name?.starts(with: "d") ?? false)) {
+//                //TODO - table sound
+//            }
+            audioSource.volume = Float(contact.collisionImpulse / 10.0)
+            if (audioSource.volume > 2.0) {
+                audioSource.volume = 2.0
+            }
+            let audioPlayer = SCNAudioPlayer(source: audioSource)
+            contact.nodeA.addAudioPlayer(audioPlayer)//TODO set up all this stuff in advance
+            var action = SCNAction.playAudio(audioSource, waitForCompletion: false)
+            contact.nodeA.runAction(action)
             if (contact.collisionImpulse > maxCollisionImpulse) {
                 maxCollisionImpulse = contact.collisionImpulse
             }
-            NSLog("\(contact.nodeA.name ?? "unknown") contacted \(contact.nodeB.name ?? "unknown")  contact.collisionImpulse: \(contact.collisionImpulse), maxCollisionImpulse: \(maxCollisionImpulse)")
+            NSLog("\(contact.nodeA.name ?? "unknown") contacted \(contact.nodeB.name ?? "unknown")  contact.collisionImpulse: \(contact.collisionImpulse), maxCollisionImpulse: \(maxCollisionImpulse) sound count: \(soundCount)")
         }
     }
 }
