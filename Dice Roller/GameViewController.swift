@@ -6,7 +6,6 @@ import CoreMotion
 class GameViewController: UIViewController {
     
     var maxCollisionImpulse: CGFloat = 0.0 //TODO REMOVE
-    var soundCount = 0
     
     var scnView: SCNView?
     var skScene: SKScene?
@@ -34,7 +33,8 @@ class GameViewController: UIViewController {
     var diceMoving = [SCNNode : Bool]()
     var diceLastMoveCheckLocations = [SCNNode : SCNVector3]()
     
-    let diceContactSounds: [SCNAudioSource] = [SCNAudioSource(named: "art.scnassets/sounds/dice_contact1.m4a")!, SCNAudioSource(named: "art.scnassets/sounds/dice_contact2.m4a")!]
+    var diceContactSoundsActions = [(SCNAudioSource, SCNAction)]()
+    var tableContactSoundsActions = [(SCNAudioSource, SCNAction)]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +50,7 @@ class GameViewController: UIViewController {
         }
         
         skScene = SKScene(size: view.bounds.size)
+        setupSounds()
         
         ["d4", "d6", "d8", "d10", "d12", "d20"].forEach { dieName in
             let die = scene.rootNode.childNode(withName: dieName, recursively: true)!
@@ -67,6 +68,10 @@ class GameViewController: UIViewController {
             diceNodes.append(die)
             diceMoving[die] = true
             makeRollLabel(die)
+            diceContactSoundsActions.forEach({ arg in
+                die.addAudioPlayer(SCNAudioPlayer(source: arg.0))
+            })
+            
             var count = 1
             let settingsCount = DiceManager.shared.diceCounts[dieName]!
             if (settingsCount == 0) {
@@ -79,9 +84,10 @@ class GameViewController: UIViewController {
             }
         }
         
-        configureFloorMaterial()
+        configureFloor()
         
         addLayFlatMessage()
+        
         
         //add settings button
         settingsButton.position = CGPoint(x: skScene!.size.width - 20, y: skScene!.size.height - 20)
@@ -106,8 +112,27 @@ class GameViewController: UIViewController {
         scene.physicsWorld.contactDelegate = self
     }
     
-    private func configureFloorMaterial() {
-        let floor = scene.rootNode.childNode(withName: "floor", recursively: true)!
+    private func setupSounds() {
+        
+        let diceContactSounds: [SCNAudioSource] = [SCNAudioSource(named: "art.scnassets/sounds/dice_contact1.m4a")!, SCNAudioSource(named: "art.scnassets/sounds/dice_contact2.m4a")!]
+        let tableContactSounds: [SCNAudioSource] = [SCNAudioSource(named: "art.scnassets/sounds/table_contact1.m4a")!, SCNAudioSource(named: "art.scnassets/sounds/table_contact2.m4a")!, SCNAudioSource(named: "art.scnassets/sounds/table_contact3.m4a")!]
+        
+        diceContactSounds.forEach { audioSource in
+            let action = SCNAction.playAudio(audioSource, waitForCompletion: false)
+            diceContactSoundsActions.append((audioSource, action))
+        }
+        
+        tableContactSounds.forEach { audioSource in
+            let action = SCNAction.playAudio(audioSource, waitForCompletion: false)
+            tableContactSoundsActions.append((audioSource, action))
+        }
+    }
+    
+    private func configureFloor() {
+        guard let floor = scene.rootNode.childNode(withName: "floor", recursively: true) else {
+            NSLog("error: floor not found")
+            return
+        }
         floor.geometry?.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Mult(SCNMatrix4MakeScale(1.5, 1.5, 1.5), SCNMatrix4MakeTranslation(0.7, 0.75, 0))
         floor.geometry?.firstMaterial?.diffuse.wrapS = .repeat
         floor.geometry?.firstMaterial?.diffuse.wrapT = .repeat
@@ -415,24 +440,29 @@ extension GameViewController: DiceWatcher {
 
 extension GameViewController: SCNPhysicsContactDelegate {
     func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
-        if (contact.collisionImpulse > 0.5) {
-            soundCount += 1
-            var audioSource = diceContactSounds.first! //TODO choose random one
-//            if (!(contact.nodeA.name?.starts(with: "d") ?? false) || !(contact.nodeB.name?.starts(with: "d") ?? false)) {
-//                //TODO - table sound
-//            }
-            audioSource.volume = Float(contact.collisionImpulse / 10.0)
-            if (audioSource.volume > 2.0) {
-                audioSource.volume = 2.0
+        if (!DiceManager.shared.sounds) {
+            return
+        }
+        let nodeAIsDie = contact.nodeA.name?.starts(with: "d") ?? false
+        let nodeBIsDie = contact.nodeB.name?.starts(with: "d") ?? false
+        let die = nodeAIsDie ? contact.nodeA : contact.nodeB
+        if (contact.collisionImpulse > 0.1 && !die.isHidden) {
+            let randIndex = Int(arc4random_uniform(UInt32(diceContactSoundsActions.count)))
+            var (audioSource, action) = diceContactSoundsActions[randIndex]
+            if (!nodeAIsDie || !nodeBIsDie) {
+                let randIndex = Int(arc4random_uniform(UInt32(tableContactSoundsActions.count)))
+                (audioSource, action) = tableContactSoundsActions[randIndex]
             }
-            let audioPlayer = SCNAudioPlayer(source: audioSource)
-            contact.nodeA.addAudioPlayer(audioPlayer)//TODO set up all this stuff in advance
-            var action = SCNAction.playAudio(audioSource, waitForCompletion: false)
-            contact.nodeA.runAction(action)
+            
+            audioSource.volume = Float(contact.collisionImpulse / 5.0)
+            if (audioSource.volume > 3.0) {
+                audioSource.volume = 3.0
+            }
+            die.runAction(action)
             if (contact.collisionImpulse > maxCollisionImpulse) {
                 maxCollisionImpulse = contact.collisionImpulse
             }
-            NSLog("\(contact.nodeA.name ?? "unknown") contacted \(contact.nodeB.name ?? "unknown")  contact.collisionImpulse: \(contact.collisionImpulse), maxCollisionImpulse: \(maxCollisionImpulse) sound count: \(soundCount)")
+            NSLog("\(contact.nodeA.name ?? "unknown") contacted \(contact.nodeB.name ?? "unknown")  contact.collisionImpulse: \(contact.collisionImpulse), maxCollisionImpulse: \(maxCollisionImpulse)")
         }
     }
 }
