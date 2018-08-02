@@ -5,17 +5,13 @@ import CoreMotion
 
 class GameViewController: UIViewController {
     
+    var maxCollisionImpulse: CGFloat = 0.0 //TODO REMOVE
+    
     var scnView: SCNView?
     var skScene: SKScene?
     let settingsButton = SKSpriteNode(imageNamed: "gears")
     
     let scene = SCNScene(named: "art.scnassets/dice.scn")!
-    
-//    var d4Node:SCNNode!
-//    var d6Node:SCNNode!
-//    var d8Node:SCNNode!
-//    var d10Node:SCNNode!
-//    var d12Node:SCNNode!
     
     let stopped = SCNVector3()
     
@@ -60,6 +56,7 @@ class GameViewController: UIViewController {
             physicsBody.angularDamping = 0.02
             physicsBody.damping = 0.05
             physicsBody.restitution = 0.9
+            physicsBody.contactTestBitMask = 0xFFFF
             die.physicsBody = physicsBody
             let mat = SCNMaterial()
             mat.diffuse.contents = UIImage(named: "daes.scnassets/\(dieName)texture.png")
@@ -102,6 +99,8 @@ class GameViewController: UIViewController {
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         scnView!.addGestureRecognizer(panGesture)
+        
+        scene.physicsWorld.contactDelegate = self
     }
     
     private func configureFloorMaterial() {
@@ -181,6 +180,7 @@ class GameViewController: UIViewController {
     }
     
     @objc func handleTap(_ recognizer: UIGestureRecognizer) {
+        
         let firstTouchPoint = recognizer.location(ofTouch: 0, in: nil)
         let skNode = skScene!.atPoint(skScene!.convertPoint(fromView: firstTouchPoint))
         if skNode == settingsButton {
@@ -407,6 +407,17 @@ extension GameViewController: DiceWatcher {
     
     func turnOffSounds() {
         //TODO
+    }
+}
+
+extension GameViewController: SCNPhysicsContactDelegate {
+    func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
+        if (contact.collisionImpulse > 0.1) {
+            if (contact.collisionImpulse > maxCollisionImpulse) {
+                maxCollisionImpulse = contact.collisionImpulse
+            }
+            NSLog("\(contact.nodeA.name ?? "unknown") contacted \(contact.nodeB.name ?? "unknown")  contact.collisionImpulse: \(contact.collisionImpulse), maxCollisionImpulse: \(maxCollisionImpulse)")
+        }
     }
 }
 
