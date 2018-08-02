@@ -62,9 +62,6 @@ class GameViewController: UIViewController {
             diceNodes.append(die)
             diceMoving[die] = true
             makeRollLabel(die)
-            diceContactSoundsActions.forEach({ arg in
-                die.addAudioPlayer(SCNAudioPlayer(source: arg.0))
-            })
             
             var count = 1
             let settingsCount = DiceManager.shared.diceCounts[dieName]!
@@ -448,9 +445,9 @@ extension GameViewController: SCNPhysicsContactDelegate {
                 (audioSource, action) = tableContactSoundsActions[randIndex]
             }
             
-            audioSource.volume = Float(contact.collisionImpulse / 5.0)
-            if (audioSource.volume > 3.0) {
-                audioSource.volume = 3.0
+            audioSource.volume = Float(contact.collisionImpulse * 3.0)
+            if (audioSource.volume > 50.0) {
+                audioSource.volume = 50.0
             }
             die.runAction(action)
 //            NSLog("\(contact.nodeA.name ?? "unknown") contacted \(contact.nodeB.name ?? "unknown")  contact.collisionImpulse: \(contact.collisionImpulse)")
